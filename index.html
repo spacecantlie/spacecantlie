@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Космос не может лгать.</title>
+    <link rel="icon" type="image/x-icon" href="./resources/favicon.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="./leaflet-side-by-side/leaflet-side-by-side.js"></script>
+</head>
+<style type="text/css">
+body {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+    color: white;
+    background: black;
+}
+
+.descriptions-container {
+    margin: 32px 64px 32px 64px;
+}
+
+
+.card {
+
+    color: white;
+    padding: 1rem;
+    height: 4rem;
+    position: relative;
+    height: fit-content;
+    margin: 32px 32px 32px 32px;
+}
+
+.cards {
+
+    max-width: 1200px;
+    margin: 24px;
+    display: grid;
+
+}
+
+/* Screen larger than 600px? 2 column */
+@media (min-width: 600px) {
+    .cards {
+        grid-template-columns: repeat(1, 1fr);
+        max-width: 750px;
+
+    }
+}
+
+/* Screen larger than 900px? 3 columns */
+@media (min-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 100%;
+    }
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    filter: grayscale(100%);
+    transition: 0.5s;
+}
+
+.card img:hover {
+    cursor: pointer;
+    filter: grayscale(0%) drop-shadow(0px 0px 16px red);
+
+
+}
+
+.preview-label {
+    position: absolute;
+    font-size: 2rem;
+    background: #000000b3;
+    color: white;
+    padding: 8px 16px 8px 16px;
+    border-radius: 8px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+#mapWrap {
+    position: fixed;
+    /* Sit on top of the page content */
+    display: block;
+    /* Hidden by default */
+    width: 0%;
+    /* Full width (cover the whole page) */
+    height: 0%;
+    /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.5s;
+    background: black;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+
+#close {
+    z-index: 10000;
+    font-size: 2rem;
+    position: absolute;
+    margin: 1rem;
+    color: white;
+    background: black;
+    padding: 8px;
+    border-radius: 16px;
+    top: 0;
+    right: 0;
+}
+
+#close:hover {
+    cursor: pointer;
+    filter: grayscale(0%) drop-shadow(0px 0px 16px red);
+}
+
+
+
+#dateLeft {
+    z-index: 10000;
+    font-size: 2rem;
+    position: absolute;
+    margin: 2rem;
+    color: white;
+    background: black;
+    padding: 8px;
+    border-radius: 16px;
+    bottom: 0;
+    left: 0px;
+}
+#dateRight {
+    z-index: 10000;
+    font-size: 2rem;
+    position: absolute;
+    margin: 2rem;
+    color: white;
+    background: black;
+    padding: 8px;
+    border-radius: 16px;
+    bottom: 0;
+    right: 0px;
+}
+
+
+
+a:visited {
+    color: white;
+}
+</style>
+
+<body>
+    <div id='mapWrap'>
+        <span id="close">&#10006;</span>
+        <div id='map'></div>
+        <div id="dateLeft"></div>
+        <div id="dateRight"></div>
+    </div>
+    <div class="descriptions-container">
+        <h1>Космос не может лгать.</h1>
+        <p>Спутники дистанционного зондирования Земли - это не журналисты и не политики, у них нет политических, национальных, религиозных или иных предпочтений. Единственная задача таких спутников - беспристрастно наблюдать. Посмотрите как изменились города Украины после <b>24 февраля 2022 года</b> на спутниковых снимках <i>Sentinel-2</i>.</p>
+        <p>Проверить достоверность информации размещенной на сайте может любой желающий, исходные данные доступны для скачивания на <a href="https://scihub.copernicus.eu/">сайте</a> программы <i>Copernicus</i>, Европейского космического агенства.</p>
+    </div>
+    <div class="cards">
+        <div class="card" id="kyiv">
+            <img src="./resources/kyiv.png">
+            <div class="preview-label">Киев</div>
+        </div>
+        <div class="card" id="mariupol">
+            <img src="./resources/mariupol.png">
+            <div class="preview-label">Мариуполь</div>
+        </div>
+        <div class="card" id="chernihiv">
+            <img src="./resources/chernihiv.png">
+            <div class="preview-label">Чернигов</div>
+        </div>
+    </div>
+    <div class="descriptions-container">
+        <p>Этот сайт разработан с использованием библиотеки <a href="https://leafletjs.com/">Leaflet</a>, которую разработал украинский математик, инженер и музыкант <a href="https://agafonkin.com/">Владимир Агафонкин</a>. Ему и его семье, как и тысячам других украинцев в ферале 2022 года пришлось покинуть Киев.</p>
+    </div>
+</body>
+<script type="text/javascript">
+const cities = [{
+        "name": "kyiv",
+        "nameRu": "Киев",
+        "coordinates": [50.45, 30.523333],
+        "leftSideTileset": {
+            "date": "07.01.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Kyiv_07.01.2022/{z}/{x}/{y}.jpg"
+        },
+        "rightSideTileset": {
+            "date": "23.03.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Kyiv_23.03.2022/{z}/{x}/{y}.jpg"
+        }
+    },
+    {
+        "name": "mariupol",
+        "nameRu": "Мариуполь",
+        "coordinates": [47.1288, 37.5639],
+        "leftSideTileset": {
+            "date": "08.01.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_08.01.2022/{z}/{x}/{y}.jpg"
+        },
+        "rightSideTileset": {
+            "date": "19.03.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_19.03.2022/{z}/{x}/{y}.jpg"
+        }
+    },
+    {
+        "name": "chernihiv",
+        "nameRu": "Чернигов",
+        "coordinates": [51.4934, 31.3],
+        "leftSideTileset": {
+            "date": "02.01.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Chernihiv_02.01.2022/{z}/{x}/{y}.jpg"
+        },
+        "rightSideTileset": {
+            "date": "23.03.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Chernihiv_23.03.2022/{z}/{x}/{y}.jpg"
+        }
+    },
+]
+
+
+let map, osm, cartoLabels, leftSideTileset, rightSideTileset
+
+
+
+
+const openFullScreenMap = (city) => {
+    const mapContainer = document.getElementById("mapWrap");
+    mapContainer.style.height = "100%";
+    mapContainer.style.width = "100%";
+    mapContainer.style.zIndex = "100";
+
+
+    setTimeout(function() {
+
+        const cityData = cities.filter(function(element) {
+            return element.name == city;
+        })[0];
+        document.getElementById("dateLeft").innerHTML = cityData.leftSideTileset.date;
+        document.getElementById("dateRight").innerHTML = cityData.rightSideTileset.date;
+
+        map = L.map('map', {
+            minZoom: 10,
+            maxZoom: 16,
+            zoomControl: false
+        });
+
+
+
+        osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let cartoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        cartoLabels.zIndex = 1000;
+
+
+
+
+        map.setView(cityData.coordinates, 13);
+
+
+        if (leftSideTileset !== undefined && rightSideTileset !== undefined) {
+            leftSideTileset.remove();
+            rightSideTileset.remove();
+        }
+
+        leftSideTileset = L.tileLayer(cityData.leftSideTileset.url, {
+            tms: true,
+            attribution: 'Contains Copernicus Sentinel-2 data 2022',
+            minZoom: 1,
+            maxZoom: 16
+        }).addTo(map)
+
+        rightSideTileset = L.tileLayer(cityData.rightSideTileset.url, {
+            tms: true,
+            attribution: 'Contains Copernicus Sentinel-2 data 2022',
+            minZoom: 1,
+            maxZoom: 16
+        }).addTo(map);
+
+
+
+        L.control.sideBySide(leftSideTileset, rightSideTileset).addTo(map);
+
+        cartoLabels.remove()
+        cartoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+    }, 1100);
+}
+
+
+
+
+const cards = document.getElementsByClassName("card");
+for (let i = 0; i < cards.length; i++) {
+    console.log(cards[i].id)
+    cards[i].addEventListener("click", function() {
+        openFullScreenMap(cards[i].id)
+    });
+}
+
+const closeButton = document.getElementById("close");
+
+closeButton.addEventListener("click", function() {
+    map.remove()
+    const mapContainer = document.getElementById("mapWrap");
+    mapContainer.style.height = "0%";
+    mapContainer.style.width = "0%";
+    mapContainer.style.zIndex = "100";
+});
+</script>
+
+</html>

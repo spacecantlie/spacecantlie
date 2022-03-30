@@ -34,6 +34,7 @@ body {
     position: relative;
     height: fit-content;
     margin: 32px 32px 32px 32px;
+    text-align: center;
 }
 
 .cards {
@@ -66,15 +67,26 @@ body {
     height: auto;
     border-radius: 50%;
     filter: grayscale(100%);
-    transition: 0.5s;
+
 }
 
 .card img:hover {
     cursor: pointer;
-    filter: grayscale(0%) drop-shadow(0px 0px 16px red);
-
-
+    animation: pulse 1s infinite ease-in-out alternate;
 }
+
+@keyframes pulse {
+    from {
+        filter: grayscale(0%) drop-shadow(0px 0px 16px #8a0303);
+        transform: scale(1);
+    }
+
+    to {
+        filter: grayscale(0%) drop-shadow(0px 0px 64px #7d1010 );
+        transform: scale(1.05);
+    }
+}
+
 
 .preview-label {
     position: absolute;
@@ -127,8 +139,10 @@ body {
 
 #close:hover {
     cursor: pointer;
-    filter: grayscale(0%) drop-shadow(0px 0px 16px red);
+    filter: grayscale(0%) drop-shadow(0px 0px 16px #8a0303);
 }
+
+
 
 
 
@@ -144,6 +158,7 @@ body {
     bottom: 0;
     left: 0px;
 }
+
 #dateRight {
     z-index: 10000;
     font-size: 2rem;
@@ -157,7 +172,9 @@ body {
     right: 0px;
 }
 
-
+a {
+    color: white;
+}
 
 a:visited {
     color: white;
@@ -177,27 +194,31 @@ a:visited {
         <p>Проверить достоверность информации размещенной на сайте может любой желающий, исходные данные доступны для скачивания на <a href="https://scihub.copernicus.eu/">сайте</a> программы <i>Copernicus</i>, Европейского космического агенства.</p>
     </div>
     <div class="cards">
-        <div class="card" id="kyiv">
+        <div class="card" id="kyiv-23-03-2022">
             <img src="./resources/kyiv.png">
-            <div class="preview-label">Киев</div>
+            <div class="preview-label">Киев 23.03.2022</div>
         </div>
-        <div class="card" id="mariupol">
+        <div class="card" id="mariupol-24-03-2022">
             <img src="./resources/mariupol.png">
-            <div class="preview-label">Мариуполь</div>
+            <div class="preview-label">Мариуполь 24.03.2022</div>
         </div>
-        <div class="card" id="chernihiv">
+        <div class="card" id="chernihiv-23.03.2022">
             <img src="./resources/chernihiv.png">
-            <div class="preview-label">Чернигов</div>
+            <div class="preview-label">Чернигов 23.03.2022</div>
+        </div>
+        <div class="card" id="mariupol-19-03-2022">
+            <img src="./resources/mariupol.png">
+            <div class="preview-label">Мариуполь 19.03.2022</div>
         </div>
     </div>
     <div class="descriptions-container">
-        <p>Этот сайт разработан с использованием библиотеки <a href="https://leafletjs.com/">Leaflet</a>, которую разработал украинский математик, инженер и музыкант <a href="https://agafonkin.com/">Владимир Агафонкин</a>. Ему и его семье, как и тысячам других украинцев в ферале 2022 года пришлось покинуть Киев.</p>
+        <p>Этот сайт сделан с использованием библиотеки <a href="https://leafletjs.com/">Leaflet</a>, которую разработал украинский математик, инженер и музыкант <a href="https://agafonkin.com/">Владимир Агафонкин</a>. Ему и его семье, как и тысячам других украинцев в ферале 2022 года пришлось покинуть Киев.</p>
     </div>
 </body>
 <script type="text/javascript">
 const cities = [{
-        "name": "kyiv",
-        "nameRu": "Киев",
+        "name": "kyiv-23-03-2022",
+        "nameRu": "Киев 23.03.2022",
         "coordinates": [50.45, 30.523333],
         "leftSideTileset": {
             "date": "07.01.2022",
@@ -209,7 +230,7 @@ const cities = [{
         }
     },
     {
-        "name": "mariupol",
+        "name": "mariupol-24-03-2022",
         "nameRu": "Мариуполь",
         "coordinates": [47.1288, 37.5639],
         "leftSideTileset": {
@@ -217,12 +238,12 @@ const cities = [{
             "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_08.01.2022/{z}/{x}/{y}.jpg"
         },
         "rightSideTileset": {
-            "date": "19.03.2022",
-            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_19.03.2022/{z}/{x}/{y}.jpg"
+            "date": "24.03.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_24.03.2022/{z}/{x}/{y}.jpg"
         }
     },
     {
-        "name": "chernihiv",
+        "name": "chernihiv-23.03.2022",
         "nameRu": "Чернигов",
         "coordinates": [51.4934, 31.3],
         "leftSideTileset": {
@@ -234,13 +255,24 @@ const cities = [{
             "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Chernihiv_23.03.2022/{z}/{x}/{y}.jpg"
         }
     },
+    {
+        "name": "mariupol-19-03-2022",
+        "nameRu": "Мариуполь",
+        "coordinates": [47.1288, 37.5639],
+        "leftSideTileset": {
+            "date": "08.01.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_08.01.2022/{z}/{x}/{y}.jpg"
+        },
+        "rightSideTileset": {
+            "date": "19.03.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_19.03.2022/{z}/{x}/{y}.jpg"
+        }
+    },
+    
 ]
 
 
 let map, osm, cartoLabels, leftSideTileset, rightSideTileset
-
-
-
 
 const openFullScreenMap = (city) => {
     const mapContainer = document.getElementById("mapWrap");

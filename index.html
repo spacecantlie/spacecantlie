@@ -194,13 +194,17 @@ a:visited {
         <p>Проверить достоверность информации размещенной на сайте может любой желающий, исходные данные доступны для скачивания на <a href="https://scihub.copernicus.eu/">сайте</a> программы <i>Copernicus</i>, Европейского космического агенства.</p>
     </div>
     <div class="cards">
-        <div class="card" id="kyiv-23-03-2022">
-            <img src="./resources/kyiv.png">
-            <div class="preview-label">Киев 23.03.2022</div>
+        <div class="card" id="mariupol-29-03-2022">
+            <img src="./resources/mariupol.png">
+            <div class="preview-label">Мариуполь 29.03.2022</div>
         </div>
         <div class="card" id="mariupol-24-03-2022">
             <img src="./resources/mariupol.png">
             <div class="preview-label">Мариуполь 24.03.2022</div>
+        </div>
+        <div class="card" id="kyiv-23-03-2022">
+            <img src="./resources/kyiv.png">
+            <div class="preview-label">Киев 23.03.2022</div>
         </div>
         <div class="card" id="chernihiv-23.03.2022">
             <img src="./resources/chernihiv.png">
@@ -212,11 +216,25 @@ a:visited {
         </div>
     </div>
     <div class="descriptions-container">
-        <p>Этот сайт сделан с использованием библиотеки <a href="https://leafletjs.com/">Leaflet</a>, которую разработал украинский математик, инженер и музыкант <a href="https://agafonkin.com/">Владимир Агафонкин</a>. Ему и его семье, как и тысячам других украинцев в феврале 2022 года пришлось покинуть Киев.</p>
+        <p>Этот сайт сделан с использованием библиотеки <a href="https://leafletjs.com/">Leaflet</a>, которую разработал украинский математик, инженер и музыкант <a href="https://agafonkin.com/">Владимир Агафонкин</a>. Ему и его семье, как и тысячам других украинцев в ферале 2022 года пришлось покинуть Киев.</p>
     </div>
 </body>
 <script type="text/javascript">
-const cities = [{
+const cities = [
+    {
+        "name": "mariupol-29-03-2022",
+        "nameRu": "Мариуполь",
+        "coordinates": [47.1288, 37.5639],
+        "leftSideTileset": {
+            "date": "08.01.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_08.01.2022/{z}/{x}/{y}.jpg"
+        },
+        "rightSideTileset": {
+            "date": "29.03.2022",
+            "url": "https://spacecantlie.s3.eu-west-1.amazonaws.com/Mariupol_29.03.2022/{z}/{x}/{y}.jpg"
+        }
+    },
+    {
         "name": "kyiv-23-03-2022",
         "nameRu": "Киев 23.03.2022",
         "coordinates": [50.45, 30.523333],
